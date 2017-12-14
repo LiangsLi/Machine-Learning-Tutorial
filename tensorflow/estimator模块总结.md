@@ -11,13 +11,14 @@
 
 ## 使用Pre-made Estimators的步骤：
 
-1. **Write one or more dataset importing functions.** <br>For example, you might create one function to import the training set and another function to import the test set. Each dataset importing function must return two objects：<br>
-	* a dictionary in which the keys are feature names and the values are Tensors (or SparseTensors) containing the corresponding feature data
-	* a Tensor containing one or more labels
-   input（dataset importing） functions create the TensorFlow operations that generate data for the model. 
-   We can use tf.estimator.inputs.numpy_input_fn to produce the input pipeline:
-	```python  
-    # train_set类型：
+1. **Write one or more dataset importing functions.构建dataset输入函数** <br>For example, you might create one function to import the training set and another function to import the test set. Each dataset importing function must return two objects（该函数应当返回一下两个值）：<br>
+	* a dictionary in which the keys are feature names and the values are Tensors (or SparseTensors) containing the corresponding feature data（这个值应当是一个字典，其key值为特征的名称，value是特征的张量值）
+	* a Tensor containing one or more labels（一个包含所有label的张量）
+	
+ 	input（dataset importing） functions create the TensorFlow operations that generate data for the model. We can use 	  tf.estimator.inputs.numpy_input_fn to produce the input pipeline:
+   
+```python  
+    # train_set类型如下：
     # Dataset(data=array(
     #     [[6.4000001, 2.79999995, 5.5999999, 2.20000005], 
     #     .......
@@ -38,14 +39,15 @@
        y=np.array(test_set.target),
        num_epochs=1,
        shuffle=False)
-	```
+```
+
 2. **Define the feature columns.** Each tf.feature_column identifies a feature name, its type, and any input pre-processing. <br>
-只需定义特征的列，不需要定义目标值的列
+只需定义特征的列，不需要定义目标值的列，如果有多个特征，应当全部定义出来
 	```python
     # Specify that all features have real-value data
  	feature_columns = [tf.feature_column.numeric_column("x", shape=[4])]
     ```
-3. **Instantiate the relevant pre-made Estimator.**
+3. **Instantiate the relevant pre-made Estimator.生成预定义估计器实例**
 	```python
     # Build 3 layer DNN with 10, 20, 10 units respectively.
   	classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,
@@ -54,7 +56,7 @@
                                           model_dir="/tmp/iris_model")
     ```
     
-4. **Call a training, evaluation, or inference method.**
+4. **Call a training, evaluation, or inference method.调用训练、评估、预测方法**
 	```python
     # Train model.
   	classifier.train(input_fn=train_input_fn, steps=2000)
