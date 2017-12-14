@@ -17,6 +17,14 @@
    input（dataset importing） functions create the TensorFlow operations that generate data for the model. 
    We can use tf.estimator.inputs.numpy_input_fn to produce the input pipeline:
 	```python  
+    # train_set类型：
+    # Dataset(data=array(
+    #     [[6.4000001, 2.79999995, 5.5999999, 2.20000005], 
+    #     .......
+    #     [5.5, 2.4000001, 3.70000005, 1.]], 
+    #     dtype=float32), 
+    #     target=array([2, .... 1, 0, 0, 1]))
+    
     # Define the training inputs
   	 train_input_fn = tf.estimator.inputs.numpy_input_fn(
       	x={"x": np.array(training_set.data)},#training_set是一个命名元组
@@ -30,7 +38,7 @@
        y=np.array(test_set.target),
        num_epochs=1,
        shuffle=False)
-    ```
+	```
 2. **Define the feature columns.** Each tf.feature_column identifies a feature name, its type, and any input pre-processing. <br>
 只需定义特征的列，不需要定义目标值的列
 	```python
